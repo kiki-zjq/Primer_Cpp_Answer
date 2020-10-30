@@ -527,3 +527,284 @@ int main()
 ---
 
 ###3.36###
+
+比较vector对象是否相等
+```
+int main(){
+	int a[10] = {1, 3, 0, 9, 7, 5, 4, 11, 12, 15};
+    int c[10] = {1, 3, 0, 9, 7, 5, 4, 13, 12, 15};
+
+    vector<int> vec1 (begin(a), end(a));
+    vector<int> vec2 (begin(c), end(c));
+
+    if (vec1 == vec2) {
+        cout << "equal" << endl;
+    } else {
+        cout << "not equal" << endl;
+    } 
+	
+	return 0;
+}
+
+```
+
+比较数组对象是否相等
+```
+int compareArray(void *a, void *b, size_t len)
+  {
+      int flag = 0;
+
+      char *p1 = static_cast<char *> (a);
+      char *p2 = static_cast<char *> (b);
+
+      while (len --) {
+          if (*p1 == *p2) {
+              flag ++;
+              p1++;
+              p2 ++;
+          }
+          else {
+              return -1;
+          }
+      }
+
+      return 1;
+  }
+  int main()
+  {
+
+      int a[10] = {1, 3, 0, 9, 7, 5, 4, 11, 12, 15};
+      int b[10] = {1, 3, 0, 9, 7, 5, 4, 11, 12, 15};
+      int c[10] = {1, 3, 0, 9, 7, 5, 4, 13, 12, 15};
+
+      if (1 == compareArray(a, b, sizeof(a))) {
+          cout << "equal!" << endl;
+      }
+      if (1 == compareArray(a, c, sizeof(a))) {
+          cout << "equal" << endl;
+      } else {
+          cout << "not equal" << endl;
+      }
+
+	  return 0;
+   }
+
+
+```
+
+---
+
+###3.37###
+
+s初始化时，并未加‘\0’,因此其长度未知，while循环会一直继续知道遇见'\0'。输出“hello+未知字符”
+
+---
+
+###3.38###
+
+两个指针相加，相当于是两个地址相加，自然没什么意义
+
+---
+
+###3.39###
+
+```
+int main()
+  {
+      string str1 = "hello world";
+      string str2 = "hello world";
+
+      if (str1 == str2) {
+          cout << str1 << " is equal with " << str2 << endl;
+      }   
+      else {
+          cout << str1 << " is not equal with " << str2 << endl;
+      }   
+
+      char s1[] = {'c', '+', '+', '\0'};
+      char s2[] = {'c', '+', '+', '\0'};
+
+      int result = memcmp (s1, s2, sizeof(s1));
+
+      if (0 == result) {
+          cout << "s1 is equal with s2!" << endl;
+      }   
+      else {
+          cout << "s1 is not equal with s2!" << endl;
+      }   
+
+	  return 0;
+  }
+```
+
+---
+
+###3.40###
+
+```
+int main(){
+	char s1[20] = "hello world\0";
+    char s2[40] = "I want to get off my work\0";
+    char s3[100];
+
+    strcpy (s3, s1);
+    strcat (s3, " ");
+    strcat (s3, s2);
+
+    cout << s3 << endl;
+	return 0;
+}
+```
+
+---
+
+###3.41###
+
+```
+
+int main(){
+	int arr[5] = {1,2,3,4,5};
+	vector<int> my_vect(begin(arr),end(arr));
+	return 0;
+}
+```
+
+---
+
+###3.42###
+
+```
+int main(){
+	
+	vector<int> ivec = {1, 3, 0, 9, 7, 5, 4, 11, 12, 15};
+    int a[10];
+	
+	for (int i = 0; i < 10; i++) {
+        a[i] = ivec[i];
+    }   
+	
+	for (auto j : a) {
+        cout << j << " ";
+    }   
+	
+	return 0;
+}
+```
+
+---
+
+###3.43###
+
+```
+void main()
+  {
+      int ia[3][4] = { 
+                      {0, 1, 2, 3}, 
+                      {4, 5, 6, 7}, 
+                      {8, 9, 10, 11} 
+                      };  
+
+  // version1
+  // 要用int引用，是因为防止数组被自动转化成指针。int row[4],就会变成int指针。
+      for (const int (&row)[4] : ia) {
+          for (int col : row)
+          cout << col << " ";
+      }   
+      cout << endl;
+
+  // version 2
+      for (int i = 0; i < 3; i++) {
+          for (int j = 0; j < 4; j++)
+          cout << ia[i][j] << " ";
+      }   
+      cout << endl;
+
+  // version 3
+  // p指向含有4个整数的数组，q指向p的首元素
+      for (int (*p)[4] = ia; p != ia+3; p++) {
+          for (int *q = *p; q != *p+4; q++)
+          cout << *q << " ";
+      }   
+      cout << endl;
+
+  }
+  
+```
+
+---
+
+###3.44###
+
+```
+
+void main{
+	int ia[3][4] = { 
+                      {0, 1, 2, 3}, 
+                      {4, 5, 6, 7}, 
+                      {8, 9, 10, 11} 
+                      };  
+//使用别名
+      using ci = const int[4];
+  // version 1
+      for (ci &row : ia) {
+          for (int col : row) {
+              cout << col << " ";
+          }   
+      }   
+      cout << endl;
+
+  // version 2
+      for (int i = 0; i < 3; i++) {
+          for (int j = 0; j < 4; j++)
+          cout << ia[i][j] << " ";
+      }   
+      cout << endl;
+
+  // version 3
+  // 使用别名
+      using ip = int[4];
+      for (ip *p = begin(ia); p != end(ia); p++) {
+          for (auto q = begin(*p); q != end(*p); q++) {
+              cout << *q << " ";
+          }   
+      }   
+      cout << endl;
+}
+```
+
+---
+
+###3.45###
+
+```
+void main(){
+	 int ia[3][4] = { 
+                      {0, 1, 2, 3}, 
+                      {4, 5, 6, 7}, 
+                      {8, 9, 10, 11} 
+                      };  
+  // version 1
+      for (auto &row : ia) {
+          for (auto col : row) {
+              cout << col << " ";
+          }   
+      }   
+      cout << endl;
+
+  // version 2
+      for (int i = 0; i < 3; i++) {
+          for (int j = 0; j < 4; j++)
+          cout << ia[i][j] << " ";
+      }   
+      cout << endl;
+
+  // version 3
+  // p指向含有4个整数的数组，q指向p的首元素
+      for (auto p = begin(ia); p != end(ia); p++) {
+          for (auto q = begin(*p); q != end(*p); q++) {
+              cout << *q << " ";
+          }   
+      }   
+      cout << endl;
+}
+```
