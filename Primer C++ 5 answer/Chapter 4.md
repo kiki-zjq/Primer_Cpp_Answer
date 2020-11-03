@@ -266,3 +266,91 @@ sizeof f();                     // sizeof (f());
 ---
 
 ###4.31###
+
+```
+void main()
+  {
+      vector<int> ivec(10, 0); 
+
+      vector<int>::size_type cnt = ivec.size();
+
+      for (vector<int>::size_type ix = 0; ix != ivec.size(); ix++, cnt++)
+      {   
+          cout << "ix = " << ix << " cnt = " << cnt << endl; 
+          ivec[ix] = cnt;
+      }   
+  }
+```
+
+---
+
+###4.32###
+
+循环遍历ia数组。ix和ptr的作用相同，一个使用下标遍历，一个使用指针遍历。
+
+---
+
+###4.33###
+
+因为逗号表达式的优先级最低，按照预期，如果someValue为真，冒号后面的语句不会再执行了，但实际上，编译器会认为冒号后面的--x属于三目运算符中的语句，而--y属于一个单独的语句。也就是（ someValue ? ++x, ++y : --x）, --y; 因此，如果someValue为真，则执行++x，++y，--y，最后得到的结果是y本身。如果someValue为假，则执行--x，--y，最终的结果是--y的值。
+
+---
+
+###4.34###
+
+```
+if (fval)                        // float类型转化为bool类型
+dval = fval + ival;        // int先转化为float，然后赋值给dval时再转化为double类型
+dval + ival * cval;        // char先转化为int，然后int转化为double
+```
+
+---
+
+###4.35###
+
+```
+char cval;
+int ival;
+unsigned int ui;
+float fval;
+double dval;
+
+cval = 'a' + 3;                             // ‘a’先转化为int进行计算，得到的结果再转化为char
+fval = ui - ival * 1.0;                //  ival先转化为double，ui也转化为double，double再截为float
+dval = ui * fval;                           // unsigned int先提升为float，float再转为double
+cval = ival + fval + dval;             // ival先转为float，float再转为double，最后double转为char
+```
+
+---
+
+###4.36###
+
+```
+i *= static_cast<int> (d);
+```
+
+---
+
+###4.37###
+
+```
+int i;
+double d;
+const string *ps;
+char *pc;
+void *pv;
+
+pv = (void *)ps;            // pv = const_cast<string *>(ps); 去除底层const属性。
+i = int(*pc);                  // i = static_cast<int>(*pc);
+pv = &d;                      // pv = static_cast<void *>(&d);
+pc = (char *)pv;           // pc = reinterpret_cast<char *> (pv);
+
+```
+
+---
+
+###4.38###
+
+将j/i的结果转化为double类型，再赋值给slope。
+
+---
